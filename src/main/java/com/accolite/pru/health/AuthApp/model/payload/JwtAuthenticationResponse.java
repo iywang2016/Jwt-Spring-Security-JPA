@@ -13,52 +13,58 @@
  */
 package com.accolite.pru.health.AuthApp.model.payload;
 
+import org.checkerframework.checker.confidential.qual.*;
+
 public class JwtAuthenticationResponse {
 
-    private String accessToken;
+    private @Confidential String accessToken;
 
-    private String refreshToken;
+    private @Confidential String refreshToken;
 
-    private String tokenType;
+    private @NonConfidential String tokenType;
 
-    private Long expiryDuration;
+    private @NonConfidential Long expiryDuration;
 
-    public JwtAuthenticationResponse(String accessToken, String refreshToken, Long expiryDuration) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+    public JwtAuthenticationResponse(String accessToken, String refreshToken, @NonConfidential Long expiryDuration) {
+        @SuppressWarnings("confidential")
+        @Confidential String confAccToken = accessToken;
+        @SuppressWarnings("confidential")
+        @Confidential String confRefToken = refreshToken;
+        this.accessToken = confAccToken;
+        this.refreshToken = confRefToken;
         this.expiryDuration = expiryDuration;
         tokenType = "Bearer ";
     }
 
-    public String getAccessToken() {
+    public @Confidential String getAccessToken() {
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken) {
+    public void setAccessToken(@Confidential String accessToken) {
         this.accessToken = accessToken;
     }
 
-    public String getTokenType() {
+    public @NonConfidential String getTokenType() {
         return tokenType;
     }
 
-    public void setTokenType(String tokenType) {
+    public void setTokenType(@NonConfidential String tokenType) {
         this.tokenType = tokenType;
     }
 
-    public String getRefreshToken() {
+    public @Confidential String getRefreshToken() {
         return refreshToken;
     }
 
-    public void setRefreshToken(String refreshToken) {
+    public void setRefreshToken(@Confidential String refreshToken) {
         this.refreshToken = refreshToken;
     }
 
-    public Long getExpiryDuration() {
+    public @NonConfidential Long getExpiryDuration() {
         return expiryDuration;
     }
 
-    public void setExpiryDuration(Long expiryDuration) {
+    public void setExpiryDuration(@NonConfidential Long expiryDuration) {
         this.expiryDuration = expiryDuration;
     }
 }

@@ -14,6 +14,7 @@
 package com.accolite.pru.health.AuthApp.model.payload;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.checkerframework.checker.confidential.qual.*;
 
 import javax.validation.constraints.NotBlank;
 
@@ -22,20 +23,20 @@ public class PasswordResetLinkRequest {
 
     @NotBlank(message = "Email cannot be blank")
     @Schema(name = "User registered email", required = true, allowableValues = "NonEmpty String")
-    private String email;
+    private @NonConfidential String email;
 
-    public PasswordResetLinkRequest(String email) {
+    public PasswordResetLinkRequest(@NonConfidential String email) {
         this.email = email;
     }
 
     public PasswordResetLinkRequest() {
     }
 
-    public String getEmail() {
+    public @NonConfidential String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@NonConfidential String email) {
         this.email = email;
     }
 

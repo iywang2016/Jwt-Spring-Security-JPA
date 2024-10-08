@@ -14,6 +14,7 @@
 package com.accolite.pru.health.AuthApp.model;
 
 import com.accolite.pru.health.AuthApp.model.audit.DateAudit;
+import org.checkerframework.checker.confidential.qual.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Column;
@@ -34,26 +35,26 @@ public class PasswordResetToken extends DateAudit {
     @Column(name = "TOKEN_ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pwd_reset_token_seq")
     @SequenceGenerator(name = "pwd_reset_token_seq", allocationSize = 1)
-    private Long id;
+    private @NonConfidential Long id;
 
     @NaturalId
     @Column(name = "TOKEN_NAME", nullable = false, unique = true)
-    private String token;
+    private @Confidential String token;
 
     @Column(name = "EXPIRY_DT", nullable = false)
-    private Instant expiryDate;
+    private @NonConfidential Instant expiryDate;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "USER_ID")
     private User user;
 
     @Column(name = "IS_ACTIVE", nullable = false)
-    private Boolean active;
+    private @NonConfidential Boolean active;
 
     @Column(name = "IS_CLAIMED", nullable = false)
-    private Boolean claimed;
+    private @NonConfidential Boolean claimed;
 
-    public PasswordResetToken(Long id, String token, Instant expiryDate, User user) {
+    public PasswordResetToken(@NonConfidential Long id, @Confidential String token, @NonConfidential Instant expiryDate, User user) {
         this.id = id;
         this.token = token;
         this.expiryDate = expiryDate;
@@ -63,11 +64,11 @@ public class PasswordResetToken extends DateAudit {
     public PasswordResetToken() {
     }
 
-    public Instant getExpiryDate() {
+    public @NonConfidential Instant getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(Instant expiryDate) {
+    public void setExpiryDate(@NonConfidential Instant expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -79,27 +80,27 @@ public class PasswordResetToken extends DateAudit {
         this.user = user;
     }
 
-    public String getToken() {
+    public @Confidential String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(@Confidential String token) {
         this.token = token;
     }
 
-    public Boolean getActive() {
+    public @NonConfidential Boolean getActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(@NonConfidential Boolean active) {
         this.active = active;
     }
 
-    public Boolean getClaimed() {
+    public @NonConfidential Boolean getClaimed() {
         return claimed;
     }
 
-    public void setClaimed(Boolean claimed) {
+    public void setClaimed(@NonConfidential Boolean claimed) {
         this.claimed = claimed;
     }
 }

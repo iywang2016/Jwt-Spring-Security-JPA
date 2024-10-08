@@ -16,6 +16,7 @@ package com.accolite.pru.health.AuthApp.model.token;
 import com.accolite.pru.health.AuthApp.model.TokenStatus;
 import com.accolite.pru.health.AuthApp.model.User;
 import com.accolite.pru.health.AuthApp.model.audit.DateAudit;
+import org.checkerframework.checker.confidential.qual.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,10 +38,10 @@ public class EmailVerificationToken extends DateAudit {
     @Column(name = "TOKEN_ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "email_token_seq")
     @SequenceGenerator(name = "email_token_seq", allocationSize = 1)
-    private Long id;
+    private @NonConfidential Long id;
 
     @Column(name = "TOKEN", nullable = false, unique = true)
-    private String token;
+    private @Confidential String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "USER_ID")
@@ -48,7 +49,7 @@ public class EmailVerificationToken extends DateAudit {
 
     @Column(name = "TOKEN_STATUS")
     @Enumerated(EnumType.STRING)
-    private TokenStatus tokenStatus;
+    private @NonConfidential TokenStatus tokenStatus;
 
     @Column(name = "EXPIRY_DT", nullable = false)
     private Instant expiryDate;
@@ -56,7 +57,7 @@ public class EmailVerificationToken extends DateAudit {
     public EmailVerificationToken() {
     }
 
-    public EmailVerificationToken(Long id, String token, User user, TokenStatus tokenStatus, Instant expiryDate) {
+    public EmailVerificationToken(@NonConfidential Long id, @Confidential String token, User user, @NonConfidential TokenStatus tokenStatus, Instant expiryDate) {
         this.id = id;
         this.token = token;
         this.user = user;
@@ -68,19 +69,19 @@ public class EmailVerificationToken extends DateAudit {
         setTokenStatus(TokenStatus.STATUS_CONFIRMED);
     }
 
-    public Long getId() {
+    public @NonConfidential Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(@NonConfidential Long id) {
         this.id = id;
     }
 
-    public String getToken() {
+    public @Confidential String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(@Confidential String token) {
         this.token = token;
     }
 
@@ -100,11 +101,11 @@ public class EmailVerificationToken extends DateAudit {
         this.expiryDate = expiryDate;
     }
 
-    public TokenStatus getTokenStatus() {
+    public @NonConfidential TokenStatus getTokenStatus() {
         return tokenStatus;
     }
 
-    public void setTokenStatus(TokenStatus tokenStatus) {
+    public void setTokenStatus(@NonConfidential TokenStatus tokenStatus) {
         this.tokenStatus = tokenStatus;
     }
 }

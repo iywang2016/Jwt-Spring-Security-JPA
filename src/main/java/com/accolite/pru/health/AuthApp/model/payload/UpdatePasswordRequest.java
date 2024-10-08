@@ -14,6 +14,7 @@
 package com.accolite.pru.health.AuthApp.model.payload;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.checkerframework.checker.confidential.qual.*;
 
 import javax.validation.constraints.NotBlank;
 
@@ -22,13 +23,13 @@ public class UpdatePasswordRequest {
 
     @NotBlank(message = "Old password must not be blank")
     @Schema(name = "Valid current user password", required = true, allowableValues = "NonEmpty String")
-    private String oldPassword;
+    private @Confidential String oldPassword;
 
     @NotBlank(message = "New password must not be blank")
     @Schema(name = "Valid new password string", required = true, allowableValues = "NonEmpty String")
-    private String newPassword;
+    private @Confidential String newPassword;
 
-    public UpdatePasswordRequest(String oldPassword, String newPassword) {
+    public UpdatePasswordRequest(@Confidential String oldPassword, @Confidential String newPassword) {
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
     }
@@ -36,19 +37,19 @@ public class UpdatePasswordRequest {
     public UpdatePasswordRequest() {
     }
 
-    public String getOldPassword() {
+    public @Confidential String getOldPassword() {
         return oldPassword;
     }
 
-    public void setOldPassword(String oldPassword) {
+    public void setOldPassword(@Confidential String oldPassword) {
         this.oldPassword = oldPassword;
     }
 
-    public String getNewPassword() {
+    public @Confidential String getNewPassword() {
         return newPassword;
     }
 
-    public void setNewPassword(String newPassword) {
+    public void setNewPassword(@Confidential String newPassword) {
         this.newPassword = newPassword;
     }
 }

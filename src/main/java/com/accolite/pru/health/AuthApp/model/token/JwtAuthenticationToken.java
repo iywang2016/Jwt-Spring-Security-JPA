@@ -13,22 +13,23 @@
  */
 package com.accolite.pru.health.AuthApp.model.token;
 
+import org.checkerframework.checker.confidential.qual.Confidential;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken {
 
-    private String token;
+    private @Confidential String token;
 
-    public JwtAuthenticationToken(Object principal, Object credentials, String token) {
+    public JwtAuthenticationToken(Object principal, Object credentials, @Confidential String token) {
         super(null, null);
         this.token = token;
     }
 
-    public String getToken() {
+    public @Confidential String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(@Confidential String token) {
         this.token = token;
     }
 

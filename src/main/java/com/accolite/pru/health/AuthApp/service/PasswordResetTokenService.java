@@ -25,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import org.checkerframework.checker.confidential.qual.*;
+
 import java.time.Instant;
 import java.util.Optional;
 
@@ -45,9 +47,10 @@ public class PasswordResetTokenService {
      * Finds a token in the database given its naturalId or throw an exception.
      * The reset token must match the email for the user and cannot be used again
      */
-    public PasswordResetToken getValidToken(PasswordResetRequest request) {
+    public @Confidential PasswordResetToken getValidToken(PasswordResetRequest request) {
         String tokenID = request.getToken();
-        PasswordResetToken token = repository.findByToken(tokenID)
+        @SuppressWarnings("confidential")
+        @Confidential PasswordResetToken token = repository.findByToken(tokenID)
                 .orElseThrow(() -> new ResourceNotFoundException("Password Reset Token", "Token Id", tokenID));
 
         matchEmail(token, request.getEmail());
@@ -105,11 +108,14 @@ public class PasswordResetTokenService {
         }
     }
 
-    PasswordResetToken createTokenWithUser(User user) {
-        String tokenID = Util.generateRandomUuid();
-        PasswordResetToken token = new PasswordResetToken();
+    @Confidential PasswordResetToken createTokenWithUser(User user) {
+        @SuppressWarnings("confidential")
+        @Confidential String tokenID = Util.generateRandomUuid();
+        @Confidential PasswordResetToken token = new @Confidential PasswordResetToken();
         token.setToken(tokenID);
-        token.setExpiryDate(Instant.now().plusMillis(expiration));
+        @SuppressWarnings("confidential")
+        @NonConfidential Instant expiryDate = Instant.now().plusMillis(expiration);
+        token.setExpiryDate(expiryDate);
         token.setClaimed(false);
         token.setActive(true);
         token.setUser(user);

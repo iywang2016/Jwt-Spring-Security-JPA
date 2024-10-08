@@ -14,6 +14,7 @@
 package com.accolite.pru.health.AuthApp.event;
 
 import com.accolite.pru.health.AuthApp.model.payload.LogOutRequest;
+import org.checkerframework.checker.confidential.qual.*;
 import org.springframework.context.ApplicationEvent;
 
 import java.time.Instant;
@@ -21,24 +22,26 @@ import java.util.Date;
 
 public class OnUserLogoutSuccessEvent extends ApplicationEvent {
 
-    private final String userEmail;
-    private final String token;
+    private final @NonConfidential String userEmail;
+    private final @Confidential String token;
     private final transient LogOutRequest logOutRequest;
-    private final Date eventTime;
+    private final @NonConfidential Date eventTime;
 
-    public OnUserLogoutSuccessEvent(String userEmail, String token, LogOutRequest logOutRequest) {
+    public OnUserLogoutSuccessEvent(@NonConfidential String userEmail, @Confidential String token, LogOutRequest logOutRequest) {
         super(userEmail);
         this.userEmail = userEmail;
         this.token = token;
         this.logOutRequest = logOutRequest;
-        this.eventTime = Date.from(Instant.now());
+        @SuppressWarnings("confidential")
+        @NonConfidential Date date = Date.from(Instant.now());
+        this.eventTime = date;
     }
 
-    public String getUserEmail() {
+    public @NonConfidential String getUserEmail() {
         return userEmail;
     }
 
-    public String getToken() {
+    public @Confidential String getToken() {
         return token;
     }
 
@@ -46,7 +49,7 @@ public class OnUserLogoutSuccessEvent extends ApplicationEvent {
         return logOutRequest;
     }
 
-    public Date getEventTime() {
+    public @NonConfidential Date getEventTime() {
         return eventTime;
     }
 }

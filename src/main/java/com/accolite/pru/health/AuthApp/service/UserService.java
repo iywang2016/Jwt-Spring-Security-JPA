@@ -23,6 +23,7 @@ import com.accolite.pru.health.AuthApp.model.payload.LogOutRequest;
 import com.accolite.pru.health.AuthApp.model.payload.RegistrationRequest;
 import com.accolite.pru.health.AuthApp.repository.UserRepository;
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.confidential.qual.Confidential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -100,7 +101,9 @@ public class UserService {
         User newUser = new User();
         Boolean isNewUserAsAdmin = registerRequest.getRegisterAsAdmin();
         newUser.setEmail(registerRequest.getEmail());
-        newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        @SuppressWarnings("confidential")
+        @Confidential String encodedPwd = passwordEncoder.encode(registerRequest.getPassword());
+        newUser.setPassword(encodedPwd);
         newUser.setUsername(registerRequest.getUsername());
         newUser.addRoles(getRolesForNewUser(isNewUserAsAdmin));
         newUser.setActive(true);
@@ -113,8 +116,8 @@ public class UserService {
      *
      * @return list of roles for the new user
      */
-    private Set<Role> getRolesForNewUser(Boolean isToBeMadeAdmin) {
-        Set<Role> newUserRoles = new HashSet<>(roleService.findAll());
+    private Set<@Confidential Role> getRolesForNewUser(Boolean isToBeMadeAdmin) {
+        Set<@Confidential Role> newUserRoles = new HashSet<@Confidential Role>(roleService.findAll());
         if (!isToBeMadeAdmin) {
             newUserRoles.removeIf(Role::isAdminRole);
         }

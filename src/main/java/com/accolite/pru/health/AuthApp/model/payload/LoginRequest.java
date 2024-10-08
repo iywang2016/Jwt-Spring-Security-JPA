@@ -15,6 +15,7 @@ package com.accolite.pru.health.AuthApp.model.payload;
 
 import com.accolite.pru.health.AuthApp.validation.annotation.NullOrNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.checkerframework.checker.confidential.qual.Confidential;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -32,7 +33,7 @@ public class LoginRequest {
 
     @NotNull(message = "Login password cannot be blank")
     @Schema(name = "Valid user password", required = true, allowableValues = "NonEmpty String")
-    private String password;
+    private @Confidential String password;
 
     @Valid
     @NotNull(message = "Device info cannot be null")
@@ -40,7 +41,7 @@ public class LoginRequest {
             "deviceInfo object")
     private DeviceInfo deviceInfo;
 
-    public LoginRequest(String username, String email, String password, DeviceInfo deviceInfo) {
+    public LoginRequest(String username, String email, @Confidential String password, DeviceInfo deviceInfo) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -66,11 +67,11 @@ public class LoginRequest {
         this.email = email;
     }
 
-    public String getPassword() {
+    public @Confidential String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(@Confidential String password) {
         this.password = password;
     }
 

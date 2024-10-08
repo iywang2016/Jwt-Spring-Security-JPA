@@ -17,6 +17,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import org.checkerframework.checker.confidential.qual.*;
+
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -35,42 +37,44 @@ public class CustomUserDetails extends User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
+    public @Confidential String getPassword() {
         return super.getPassword();
     }
 
     @Override
-    public String getUsername() {
+    public @NonConfidential String getUsername() {
         return super.getEmail();
     }
 
     @Override
-    public boolean isAccountNonExpired() {
+    public @NonConfidential boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked() {
+    public @NonConfidential boolean isAccountNonLocked() {
         return super.getActive();
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {
+    public @NonConfidential boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled() {
+    public @NonConfidential boolean isEnabled() {
         return super.getEmailVerified();
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
+    public @NonConfidential int hashCode() {
+        @SuppressWarnings("confidential")
+        @NonConfidential int hashId = Objects.hash(getId());
+        return hashId;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public @NonConfidential boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }
@@ -78,6 +82,8 @@ public class CustomUserDetails extends User implements UserDetails {
             return false;
         }
         CustomUserDetails that = (CustomUserDetails) obj;
-        return Objects.equals(getId(), that.getId());
+        @SuppressWarnings("confidential")
+        @NonConfidential boolean result = Objects.equals(getId(), that.getId());
+        return result;
     }
 }

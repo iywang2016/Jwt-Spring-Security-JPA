@@ -16,6 +16,7 @@ package com.accolite.pru.health.AuthApp.model.payload;
 import com.accolite.pru.health.AuthApp.model.DeviceType;
 import com.accolite.pru.health.AuthApp.validation.annotation.NullOrNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.checkerframework.checker.confidential.qual.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -24,52 +25,52 @@ public class DeviceInfo {
 
     @NotBlank(message = "Device id cannot be blank")
     @Schema(name = "Device Id", required = true, type = "string", allowableValues = "Non empty string")
-    private String deviceId;
+    private @NonConfidential String deviceId;
 
     @NotNull(message = "Device type cannot be null")
     @Schema(name = "Device type Android/iOS", required = true, type = "string", allowableValues =
             "DEVICE_TYPE_ANDROID, DEVICE_TYPE_IOS")
-    private DeviceType deviceType;
+    private @NonConfidential DeviceType deviceType;
 
     @NullOrNotBlank(message = "Device notification token can be null but not blank")
     @Schema(name = "Device notification id", type = "string", allowableValues = "Non empty string")
-    private String notificationToken;
+    private @Confidential String notificationToken;
 
     public DeviceInfo() {
     }
 
-    public DeviceInfo(String deviceId, DeviceType deviceType, String notificationToken) {
+    public DeviceInfo(@NonConfidential String deviceId, @NonConfidential DeviceType deviceType, @Confidential String notificationToken) {
         this.deviceId = deviceId;
         this.deviceType = deviceType;
         this.notificationToken = notificationToken;
     }
 
-    public String getDeviceId() {
+    public @NonConfidential String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(String deviceId) {
+    public void setDeviceId(@NonConfidential String deviceId) {
         this.deviceId = deviceId;
     }
 
-    public DeviceType getDeviceType() {
+    public @NonConfidential DeviceType getDeviceType() {
         return deviceType;
     }
 
-    public void setDeviceType(DeviceType deviceType) {
+    public void setDeviceType(@NonConfidential DeviceType deviceType) {
         this.deviceType = deviceType;
     }
 
-    public String getNotificationToken() {
+    public @Confidential String getNotificationToken() {
         return notificationToken;
     }
 
-    public void setNotificationToken(String notificationToken) {
+    public void setNotificationToken(@Confidential String notificationToken) {
         this.notificationToken = notificationToken;
     }
 
     @Override
-    public String toString() {
+    public @Confidential String toString() {
         return "DeviceInfo{" +
                 "deviceId='" + deviceId + '\'' +
                 ", deviceType=" + deviceType +

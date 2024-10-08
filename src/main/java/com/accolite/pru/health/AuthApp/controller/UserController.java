@@ -26,6 +26,7 @@ import com.accolite.pru.health.AuthApp.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.confidential.qual.Confidential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.repository.query.Param;
@@ -114,8 +115,10 @@ public class UserController {
         userService.logoutUser(customUserDetails, logOutRequest);
         Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
+        @SuppressWarnings("confidential")
+        @Confidential String token = credentials.toString();
         OnUserLogoutSuccessEvent logoutSuccessEvent = new OnUserLogoutSuccessEvent(customUserDetails.getEmail(),
-                credentials.toString(), logOutRequest);
+                token, logOutRequest);
         applicationEventPublisher.publishEvent(logoutSuccessEvent);
         return ResponseEntity.ok(new ApiResponse(true, "Log out successful"));
     }

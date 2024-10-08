@@ -14,6 +14,7 @@
 package com.accolite.pru.health.AuthApp.security;
 
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.confidential.qual.NonConfidential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.AuthenticationException;
@@ -46,7 +47,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             resolver.resolveException(request, httpServletResponse, null, (Exception) throwable);
         }
         if (!httpServletResponse.isCommitted()) {
-            httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
+            @SuppressWarnings("confidential")
+            @NonConfidential String message = ex.getMessage();
+            httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
         }
     }
 }

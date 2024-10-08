@@ -17,6 +17,8 @@ import com.accolite.pru.health.AuthApp.model.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.checkerframework.checker.confidential.qual.Confidential;
+import org.checkerframework.checker.confidential.qual.NonConfidential;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -44,16 +46,18 @@ public class JwtTokenProvider {
      * Generates a token from a principal object. Embed the refresh token in the jwt
      * so that a new jwt can be created
      */
-    public String generateToken(CustomUserDetails customUserDetails) {
+    public @Confidential String generateToken(CustomUserDetails customUserDetails) {
         Instant expiryDate = Instant.now().plusMillis(jwtExpirationInMs);
         String authorities = getUserAuthorities(customUserDetails);
-        return Jwts.builder()
+        @SuppressWarnings("confidential")
+        @Confidential String token = Jwts.builder()
                 .setSubject(Long.toString(customUserDetails.getId()))
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(expiryDate))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .claim(AUTHORITIES_CLAIM, authorities)
                 .compact();
+        return token;
     }
 
     /**
@@ -85,13 +89,15 @@ public class JwtTokenProvider {
     /**
      * Returns the token expiration date encapsulated within the token
      */
-    public Date getTokenExpiryFromJWT(String token) {
+    public @NonConfidential Date getTokenExpiryFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getExpiration();
+        @SuppressWarnings("confidential")
+        @NonConfidential Date exp = claims.getExpiration();
+        return exp;
     }
 
     /**

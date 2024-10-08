@@ -19,6 +19,7 @@ import com.accolite.pru.health.AuthApp.model.User;
 import com.accolite.pru.health.AuthApp.model.token.EmailVerificationToken;
 import com.accolite.pru.health.AuthApp.repository.EmailVerificationTokenRepository;
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.confidential.qual.Confidential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -44,45 +45,51 @@ public class EmailVerificationTokenService {
      * Create an email verification token and persist it in the database which will be
      * verified by the user
      */
-    public void createVerificationToken(User user, String token) {
-        EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
+    public void createVerificationToken(User user, @Confidential String token) {
+        @Confidential EmailVerificationToken emailVerificationToken = new @Confidential EmailVerificationToken();
         emailVerificationToken.setToken(token);
         emailVerificationToken.setTokenStatus(TokenStatus.STATUS_PENDING);
         emailVerificationToken.setUser(user);
         emailVerificationToken.setExpiryDate(Instant.now().plusMillis(emailVerificationTokenExpiryDuration));
-        logger.info("Generated Email verification token [" + emailVerificationToken + "]");
+        logger.info("Generated Email verification token");
         emailVerificationTokenRepository.save(emailVerificationToken);
     }
 
     /**
      * Updates an existing token in the database with a new expiration
      */
-    public EmailVerificationToken updateExistingTokenWithNameAndExpiry(EmailVerificationToken existingToken) {
+    public @Confidential EmailVerificationToken updateExistingTokenWithNameAndExpiry(@Confidential EmailVerificationToken existingToken) {
         existingToken.setTokenStatus(TokenStatus.STATUS_PENDING);
         existingToken.setExpiryDate(Instant.now().plusMillis(emailVerificationTokenExpiryDuration));
-        logger.info("Updated Email verification token [" + existingToken + "]");
+        logger.info("Updated Email verification token");
         return save(existingToken);
     }
 
     /**
      * Finds an email verification token by the @NaturalId token
      */
-    public Optional<EmailVerificationToken> findByToken(String token) {
-        return emailVerificationTokenRepository.findByToken(token);
+    public Optional<@Confidential EmailVerificationToken> findByToken(String token) {
+        @SuppressWarnings("confidential")
+        Optional<@Confidential EmailVerificationToken> result = emailVerificationTokenRepository.findByToken(token);
+        return result;
     }
 
     /**
      * Saves an email verification token in the repository
      */
-    public EmailVerificationToken save(EmailVerificationToken emailVerificationToken) {
-        return emailVerificationTokenRepository.save(emailVerificationToken);
+    public @Confidential EmailVerificationToken save(EmailVerificationToken emailVerificationToken) {
+        @SuppressWarnings("confidential")
+        @Confidential EmailVerificationToken token = emailVerificationTokenRepository.save(emailVerificationToken);
+        return token;
     }
 
     /**
      * Generates a new random UUID to be used as the token for email verification
      */
-    public String generateNewToken() {
-        return UUID.randomUUID().toString();
+    public @Confidential String generateNewToken() {
+        @SuppressWarnings("confidential")
+        @Confidential String result = UUID.randomUUID().toString();
+        return result;
     }
 
     /**

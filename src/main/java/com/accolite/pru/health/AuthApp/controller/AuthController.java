@@ -38,6 +38,8 @@ import com.accolite.pru.health.AuthApp.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.confidential.qual.Confidential;
+import org.checkerframework.checker.confidential.qual.NonConfidential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.repository.query.Param;
@@ -114,8 +116,10 @@ public class AuthController {
         return authService.createAndPersistRefreshTokenForDevice(authentication, loginRequest)
                 .map(RefreshToken::getToken)
                 .map(refreshToken -> {
-                    String jwtToken = authService.generateToken(customUserDetails);
-                    return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken, tokenProvider.getExpiryDuration()));
+                    @Confidential String jwtToken = authService.generateToken(customUserDetails);
+                    @SuppressWarnings("confidential")
+                    @NonConfidential long expiryDuration = tokenProvider.getExpiryDuration();
+                    return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken, expiryDuration));
                 })
                 .orElseThrow(() -> new UserLoginException("Couldn't create refresh token for: [" + loginRequest + "]"));
     }
@@ -246,8 +250,10 @@ public class AuthController {
         return authService.refreshJwtToken(tokenRefreshRequest)
                 .map(updatedToken -> {
                     String refreshToken = tokenRefreshRequest.getRefreshToken();
-                    logger.info("Created new Jwt Auth token: " + updatedToken);
-                    return ResponseEntity.ok(new JwtAuthenticationResponse(updatedToken, refreshToken, tokenProvider.getExpiryDuration()));
+                    logger.info("Created new Jwt Auth token");
+                    @SuppressWarnings("confidential")
+                    @NonConfidential long expiryDuration = tokenProvider.getExpiryDuration();
+                    return ResponseEntity.ok(new JwtAuthenticationResponse(updatedToken, refreshToken, expiryDuration));
                 })
                 .orElseThrow(() -> new TokenRefreshException(tokenRefreshRequest.getRefreshToken(), "Unexpected error during token refresh. Please logout and login again."));
     }

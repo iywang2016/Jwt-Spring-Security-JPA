@@ -14,6 +14,7 @@
 package com.accolite.pru.health.AuthApp.model.payload;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.checkerframework.checker.confidential.qual.*;
 
 import javax.validation.constraints.NotBlank;
 
@@ -23,20 +24,20 @@ public class TokenRefreshRequest {
     @NotBlank(message = "Refresh token cannot be blank")
     @Schema(name = "Valid refresh token passed during earlier successful authentications", required = true,
             allowableValues = "NonEmpty String")
-    private String refreshToken;
+    private @Confidential String refreshToken;
 
-    public TokenRefreshRequest(String refreshToken) {
+    public TokenRefreshRequest(@Confidential String refreshToken) {
         this.refreshToken = refreshToken;
     }
 
     public TokenRefreshRequest() {
     }
 
-    public String getRefreshToken() {
+    public @Confidential String getRefreshToken() {
         return refreshToken;
     }
 
-    public void setRefreshToken(String refreshToken) {
+    public void setRefreshToken(@Confidential String refreshToken) {
         this.refreshToken = refreshToken;
     }
 }

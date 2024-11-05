@@ -58,7 +58,7 @@ public class Role {
     }
 
     public @Confidential boolean isAdminRole() {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // literals
         @Confidential boolean result = (null != this && this.role.equals(RoleName.ROLE_ADMIN));
         return result;
     }

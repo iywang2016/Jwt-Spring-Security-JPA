@@ -69,7 +69,7 @@ public class EmailVerificationTokenService {
      * Finds an email verification token by the @NaturalId token
      */
     public Optional<@Confidential EmailVerificationToken> findByToken(String token) {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         Optional<@Confidential EmailVerificationToken> result = emailVerificationTokenRepository.findByToken(token);
         return result;
     }
@@ -78,7 +78,7 @@ public class EmailVerificationTokenService {
      * Saves an email verification token in the repository
      */
     public @Confidential EmailVerificationToken save(EmailVerificationToken emailVerificationToken) {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential EmailVerificationToken token = emailVerificationTokenRepository.save(emailVerificationToken);
         return token;
     }
@@ -87,7 +87,7 @@ public class EmailVerificationTokenService {
      * Generates a new random UUID to be used as the token for email verification
      */
     public @Confidential String generateNewToken() {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential String result = UUID.randomUUID().toString();
         return result;
     }

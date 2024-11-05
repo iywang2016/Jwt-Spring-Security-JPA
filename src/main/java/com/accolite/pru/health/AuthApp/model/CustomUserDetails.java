@@ -68,7 +68,7 @@ public class CustomUserDetails extends User implements UserDetails {
 
     @Override
     public @NonConfidential int hashCode() {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // wrapper operation
         @NonConfidential int hashId = Objects.hash(getId());
         return hashId;
     }
@@ -82,7 +82,7 @@ public class CustomUserDetails extends User implements UserDetails {
             return false;
         }
         CustomUserDetails that = (CustomUserDetails) obj;
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // literals
         @NonConfidential boolean result = Objects.equals(getId(), that.getId());
         return result;
     }

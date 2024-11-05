@@ -73,7 +73,7 @@ public class LoggedOutJwtTokenCache {
     private @NonConfidential long getTTLForToken(Date date) {
         long secondAtExpiry = date.toInstant().getEpochSecond();
         long secondAtLogout = Instant.now().getEpochSecond();
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // wrapper operation
         @NonConfidential long ttl = Math.max(0, secondAtExpiry - secondAtLogout);
         return ttl;
     }

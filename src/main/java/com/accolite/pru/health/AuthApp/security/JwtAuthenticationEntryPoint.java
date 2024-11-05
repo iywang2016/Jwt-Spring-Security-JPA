@@ -47,7 +47,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             resolver.resolveException(request, httpServletResponse, null, (Exception) throwable);
         }
         if (!httpServletResponse.isCommitted()) {
-            @SuppressWarnings("confidential")
+            @SuppressWarnings("confidential") // true positive
             @NonConfidential String message = ex.getMessage();
             httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
         }

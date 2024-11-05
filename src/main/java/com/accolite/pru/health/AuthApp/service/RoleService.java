@@ -35,7 +35,7 @@ public class RoleService {
      * Find all roles from the database
      */
     public Collection<@Confidential Role> findAll() {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         Collection<@Confidential Role> roles = roleRepository.findAll();
         return roles;
     }

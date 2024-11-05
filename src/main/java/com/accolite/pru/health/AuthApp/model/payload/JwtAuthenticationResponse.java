@@ -26,9 +26,9 @@ public class JwtAuthenticationResponse {
     private @NonConfidential Long expiryDuration;
 
     public JwtAuthenticationResponse(String accessToken, String refreshToken, @NonConfidential Long expiryDuration) {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential String confAccToken = accessToken;
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential String confRefToken = refreshToken;
         this.accessToken = confAccToken;
         this.refreshToken = confRefToken;

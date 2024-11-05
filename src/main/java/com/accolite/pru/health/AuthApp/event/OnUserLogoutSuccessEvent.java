@@ -32,7 +32,7 @@ public class OnUserLogoutSuccessEvent extends ApplicationEvent {
         this.userEmail = userEmail;
         this.token = token;
         this.logOutRequest = logOutRequest;
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // literals
         @NonConfidential Date date = Date.from(Instant.now());
         this.eventTime = date;
     }

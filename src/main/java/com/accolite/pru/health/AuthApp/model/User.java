@@ -132,7 +132,7 @@ public class User extends DateAudit {
     }
 
     public void setPassword(String password) {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential String cPwd = password;
         this.password = cPwd;
     }

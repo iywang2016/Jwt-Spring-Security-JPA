@@ -39,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential Optional<User> dbUser = userRepository.findByEmail(email);
         logger.info("Fetched user by " + email);
         return dbUser.map(CustomUserDetails::new)
@@ -47,7 +47,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserById(Long id) {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential Optional<User> dbUser = userRepository.findById(id);
         logger.info("Fetched user by " + id);
         return dbUser.map(CustomUserDetails::new)

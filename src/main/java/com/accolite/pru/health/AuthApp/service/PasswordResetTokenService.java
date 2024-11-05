@@ -49,7 +49,7 @@ public class PasswordResetTokenService {
      */
     public @Confidential PasswordResetToken getValidToken(PasswordResetRequest request) {
         String tokenID = request.getToken();
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential PasswordResetToken token = repository.findByToken(tokenID)
                 .orElseThrow(() -> new ResourceNotFoundException("Password Reset Token", "Token Id", tokenID));
 
@@ -109,11 +109,11 @@ public class PasswordResetTokenService {
     }
 
     @Confidential PasswordResetToken createTokenWithUser(User user) {
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential String tokenID = Util.generateRandomUuid();
         @Confidential PasswordResetToken token = new @Confidential PasswordResetToken();
         token.setToken(tokenID);
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // literals
         @NonConfidential Instant expiryDate = Instant.now().plusMillis(expiration);
         token.setExpiryDate(expiryDate);
         token.setClaimed(false);

@@ -146,11 +146,11 @@ public class AuthService {
                 .orElseThrow(() -> new ResourceNotFoundException("Token", "Existing email verification", existingToken));
 
         if (emailVerificationToken.getUser().getEmailVerified()) {
-            @SuppressWarnings("confidential")
+            @SuppressWarnings("confidential") // force confidential
             @Confidential Optional<EmailVerificationToken> result = Optional.empty();
             return result;
         }
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential Optional<EmailVerificationToken> result = Optional.ofNullable(emailVerificationTokenService.updateExistingTokenWithNameAndExpiry(emailVerificationToken));
         return result;
     }
@@ -175,7 +175,7 @@ public class AuthService {
             logger.info("Current password is invalid");
             throw new UpdatePasswordException(currentUser.getEmail(), "Invalid current password");
         }
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential String newPassword = passwordEncoder.encode(updatePasswordRequest.getNewPassword());
         currentUser.setPassword(newPassword);
         userService.save(currentUser);
@@ -246,7 +246,7 @@ public class AuthService {
      */
     public @Confidential Optional<PasswordResetToken> generatePasswordResetToken(PasswordResetLinkRequest passwordResetLinkRequest) {
         String email = passwordResetLinkRequest.getEmail();
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential Optional<PasswordResetToken> result = userService.findByEmail(email)
                 .map(passwordResetService::createToken)
                 .orElseThrow(() -> new PasswordResetLinkException(email, "No matching user found for the given request"));

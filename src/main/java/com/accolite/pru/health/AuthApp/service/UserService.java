@@ -101,7 +101,7 @@ public class UserService {
         User newUser = new User();
         Boolean isNewUserAsAdmin = registerRequest.getRegisterAsAdmin();
         newUser.setEmail(registerRequest.getEmail());
-        @SuppressWarnings("confidential")
+        @SuppressWarnings("confidential") // force confidential
         @Confidential String encodedPwd = passwordEncoder.encode(registerRequest.getPassword());
         newUser.setPassword(encodedPwd);
         newUser.setUsername(registerRequest.getUsername());

@@ -117,7 +117,6 @@ public class AuthController {
                 .map(RefreshToken::getToken)
                 .map(refreshToken -> {
                     @Confidential String jwtToken = authService.generateToken(customUserDetails);
-                    @SuppressWarnings("confidential")
                     @NonConfidential long expiryDuration = tokenProvider.getExpiryDuration();
                     return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken, expiryDuration));
                 })
@@ -251,7 +250,6 @@ public class AuthController {
                 .map(updatedToken -> {
                     String refreshToken = tokenRefreshRequest.getRefreshToken();
                     logger.info("Created new Jwt Auth token");
-                    @SuppressWarnings("confidential")
                     @NonConfidential long expiryDuration = tokenProvider.getExpiryDuration();
                     return ResponseEntity.ok(new JwtAuthenticationResponse(updatedToken, refreshToken, expiryDuration));
                 })

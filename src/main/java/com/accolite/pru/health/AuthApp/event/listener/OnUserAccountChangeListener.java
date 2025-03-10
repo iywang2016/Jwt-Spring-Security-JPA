@@ -19,6 +19,7 @@ import com.accolite.pru.health.AuthApp.model.User;
 import com.accolite.pru.health.AuthApp.service.MailService;
 import freemarker.template.TemplateException;
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.confidential.qual.NonConfidential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
@@ -60,7 +61,9 @@ public class OnUserAccountChangeListener implements ApplicationListener<OnUserAc
         try {
             mailService.sendAccountChangeEmail(action, actionStatus, recipientAddress);
         } catch (IOException | TemplateException | MessagingException e) {
-            logger.error(e);
+            @SuppressWarnings("confidential") // true positive
+            @NonConfidential Exception ex = e;
+            logger.error(ex);
             throw new MailSendException(recipientAddress, "Account Change Mail");
         }
     }

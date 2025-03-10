@@ -15,7 +15,7 @@ package com.accolite.pru.health.AuthApp.model;
 
 import org.checkerframework.checker.confidential.qual.NonConfidential;
 
-public @NonConfidential enum TokenStatus {
+public enum TokenStatus {
     /**
      * Token is in pending state awaiting user confirmation
      */

@@ -101,7 +101,6 @@ public class UserService {
         User newUser = new User();
         Boolean isNewUserAsAdmin = registerRequest.getRegisterAsAdmin();
         newUser.setEmail(registerRequest.getEmail());
-        @SuppressWarnings("confidential") // force confidential
         @Confidential String encodedPwd = passwordEncoder.encode(registerRequest.getPassword());
         newUser.setPassword(encodedPwd);
         newUser.setUsername(registerRequest.getUsername());
@@ -116,8 +115,8 @@ public class UserService {
      *
      * @return list of roles for the new user
      */
-    private Set<@Confidential Role> getRolesForNewUser(Boolean isToBeMadeAdmin) {
-        Set<@Confidential Role> newUserRoles = new HashSet<@Confidential Role>(roleService.findAll());
+    private Set<Role> getRolesForNewUser(@Confidential Boolean isToBeMadeAdmin) {
+        Set<Role> newUserRoles = new HashSet<Role>(roleService.findAll());
         if (!isToBeMadeAdmin) {
             newUserRoles.removeIf(Role::isAdminRole);
         }

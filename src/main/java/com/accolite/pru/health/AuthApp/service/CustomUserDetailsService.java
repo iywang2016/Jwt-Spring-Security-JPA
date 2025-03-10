@@ -39,16 +39,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        @SuppressWarnings("confidential") // force confidential
-        @Confidential Optional<User> dbUser = userRepository.findByEmail(email);
+        Optional<User> dbUser = userRepository.findByEmail(email);
         logger.info("Fetched user by " + email);
         return dbUser.map(CustomUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("Couldn't find a matching user email in the database for " + email));
     }
 
     public UserDetails loadUserById(Long id) {
-        @SuppressWarnings("confidential") // force confidential
-        @Confidential Optional<User> dbUser = userRepository.findById(id);
+        Optional<User> dbUser = userRepository.findById(id);
         logger.info("Fetched user by " + id);
         return dbUser.map(CustomUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("Couldn't find a matching user id in the database for " + id));

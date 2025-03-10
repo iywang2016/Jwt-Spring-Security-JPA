@@ -15,6 +15,7 @@ package com.accolite.pru.health.AuthApp.model.token;
 
 import com.accolite.pru.health.AuthApp.model.UserDevice;
 import com.accolite.pru.health.AuthApp.model.audit.DateAudit;
+import org.checkerframework.checker.confidential.qual.Confidential;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.CascadeType;
@@ -39,7 +40,7 @@ public class RefreshToken extends DateAudit {
 
     @Column(name = "TOKEN", nullable = false, unique = true)
     @NaturalId(mutable = true)
-    private String token;
+    private @Confidential String token;
 
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_DEVICE_ID", unique = true)
@@ -54,7 +55,7 @@ public class RefreshToken extends DateAudit {
     public RefreshToken() {
     }
 
-    public RefreshToken(Long id, String token, UserDevice userDevice, Long refreshCount, Instant expiryDate) {
+    public RefreshToken(Long id, @Confidential String token, UserDevice userDevice, Long refreshCount, Instant expiryDate) {
         this.id = id;
         this.token = token;
         this.userDevice = userDevice;
@@ -74,11 +75,11 @@ public class RefreshToken extends DateAudit {
         this.id = id;
     }
 
-    public String getToken() {
+    public @Confidential String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(@Confidential String token) {
         this.token = token;
     }
 

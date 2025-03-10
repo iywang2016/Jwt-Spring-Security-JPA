@@ -20,6 +20,7 @@ import com.accolite.pru.health.AuthApp.service.EmailVerificationTokenService;
 import com.accolite.pru.health.AuthApp.service.MailService;
 import freemarker.template.TemplateException;
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.confidential.qual.NonConfidential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
@@ -60,12 +61,16 @@ public class OnUserRegistrationCompleteListener implements ApplicationListener<O
         emailVerificationTokenService.createVerificationToken(user, token);
 
         String recipientAddress = user.getEmail();
-        String emailConfirmationUrl = event.getRedirectUrl().queryParam("token", token).toUriString();
+        @SuppressWarnings("confidential")
+        @NonConfidential String nonConfToken = token;
+        String emailConfirmationUrl = event.getRedirectUrl().queryParam("token", nonConfToken).toUriString();
 
         try {
             mailService.sendEmailVerification(emailConfirmationUrl, recipientAddress);
         } catch (IOException | TemplateException | MessagingException e) {
-            logger.error(e);
+            @SuppressWarnings("confidential") // true positive
+            @NonConfidential Exception nonConfErr = e;
+            logger.error(nonConfErr);
             throw new MailSendException(recipientAddress, "Email Verification");
         }
     }

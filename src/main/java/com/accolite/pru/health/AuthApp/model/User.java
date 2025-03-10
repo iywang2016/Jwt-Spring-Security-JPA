@@ -42,16 +42,16 @@ public class User extends DateAudit {
     @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
     @SequenceGenerator(name = "user_seq", allocationSize = 1)
-    private @NonConfidential Long id;
+    private Long id;
 
     @NaturalId
     @Column(name = "EMAIL", unique = true)
     @NotBlank(message = "User email cannot be null")
-    private @NonConfidential String email;
+    private String email;
 
     @Column(name = "USERNAME", unique = true)
     @NullOrNotBlank(message = "Username can not be blank")
-    private @NonConfidential String username;
+    private String username;
 
     @Column(name = "PASSWORD")
     @NotNull(message = "Password cannot be null")
@@ -59,23 +59,23 @@ public class User extends DateAudit {
 
     @Column(name = "FIRST_NAME")
     @NullOrNotBlank(message = "First name can not be blank")
-    private @NonConfidential String firstName;
+    private String firstName;
 
     @Column(name = "LAST_NAME")
     @NullOrNotBlank(message = "Last name can not be blank")
-    private @NonConfidential String lastName;
+    private String lastName;
 
     @Column(name = "IS_ACTIVE", nullable = false)
-    private @NonConfidential Boolean active;
+    private Boolean active;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "USER_AUTHORITY", joinColumns = {
             @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")}, inverseJoinColumns = {
             @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")})
-    private @NonConfidential Set<Role> roles = new @NonConfidential HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name = "IS_EMAIL_VERIFIED", nullable = false)
-    private @NonConfidential Boolean isEmailVerified;
+    private Boolean isEmailVerified;
 
     public User() {
         super();
@@ -93,12 +93,12 @@ public class User extends DateAudit {
         isEmailVerified = user.getEmailVerified();
     }
 
-    public void addRole(@Confidential Role role) {
+    public void addRole(Role role) {
         roles.add(role);
         role.getUserList().add(this);
     }
 
-    public void addRoles(Set<@Confidential Role> roles) {
+    public void addRoles(Set<Role> roles) {
         roles.forEach(this::addRole);
     }
 
@@ -111,19 +111,19 @@ public class User extends DateAudit {
         setEmailVerified(true);
     }
 
-    public @NonConfidential Long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@NonConfidential Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public @NonConfidential String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(@NonConfidential String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -131,61 +131,58 @@ public class User extends DateAudit {
         return password;
     }
 
-    public void setPassword(String password) {
-        @SuppressWarnings("confidential") // force confidential
-        @Confidential String cPwd = password;
-        this.password = cPwd;
+    public void setPassword(@Confidential String password) {
+        this.password = password;
     }
 
-    public @NonConfidential String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(@NonConfidential String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public @NonConfidential String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(@NonConfidential String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public @NonConfidential String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@NonConfidential String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public @NonConfidential Boolean getActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(@NonConfidential Boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
-    public @NonConfidential Set<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(@NonConfidential Set<Role> authorities) {
+    public void setRoles(Set<Role> authorities) {
         roles = authorities;
     }
 
-    public @NonConfidential Boolean getEmailVerified() {
+    public Boolean getEmailVerified() {
         return isEmailVerified;
     }
 
-    public void setEmailVerified(@NonConfidential Boolean emailVerified) {
+    public void setEmailVerified(Boolean emailVerified) {
         isEmailVerified = emailVerified;
     }
 
-    @Override
     public @Confidential String toString() {
         return "User{" + "id=" + id + ", email='" + email + '\'' + ", username='" + username + '\'' + ", password='"
                 + password + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", active="

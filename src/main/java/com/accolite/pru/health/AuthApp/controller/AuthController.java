@@ -117,7 +117,7 @@ public class AuthController {
                 .map(RefreshToken::getToken)
                 .map(refreshToken -> {
                     @Confidential String jwtToken = authService.generateToken(customUserDetails);
-                    @NonConfidential long expiryDuration = tokenProvider.getExpiryDuration();
+                    long expiryDuration = tokenProvider.getExpiryDuration();
                     return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken, refreshToken, expiryDuration));
                 })
                 .orElseThrow(() -> new UserLoginException("Couldn't create refresh token for: [" + loginRequest + "]"));
@@ -250,7 +250,7 @@ public class AuthController {
                 .map(updatedToken -> {
                     String refreshToken = tokenRefreshRequest.getRefreshToken();
                     logger.info("Created new Jwt Auth token");
-                    @NonConfidential long expiryDuration = tokenProvider.getExpiryDuration();
+                    long expiryDuration = tokenProvider.getExpiryDuration();
                     return ResponseEntity.ok(new JwtAuthenticationResponse(updatedToken, refreshToken, expiryDuration));
                 })
                 .orElseThrow(() -> new TokenRefreshException(tokenRefreshRequest.getRefreshToken(), "Unexpected error during token refresh. Please logout and login again."));

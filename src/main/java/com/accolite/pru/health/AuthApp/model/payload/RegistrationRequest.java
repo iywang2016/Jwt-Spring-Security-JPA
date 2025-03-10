@@ -24,11 +24,11 @@ public class RegistrationRequest {
 
     @NullOrNotBlank(message = "Registration username can be null but not blank")
     @Schema(name = "A valid username", allowableValues = "NonEmpty String")
-    private @NonConfidential String username;
+    private String username;
 
     @NullOrNotBlank(message = "Registration email can be null but not blank")
     @Schema(name = "A valid email", required = true, allowableValues = "NonEmpty String")
-    private @NonConfidential String email;
+    private String email;
 
     @NotNull(message = "Registration password cannot be null")
     @Schema(name = "A valid password string", required = true, allowableValues = "NonEmpty String")
@@ -39,7 +39,7 @@ public class RegistrationRequest {
             type = "boolean", allowableValues = "true, false")
     private @Confidential Boolean registerAsAdmin;
 
-    public RegistrationRequest(@NonConfidential String username, @NonConfidential String email,
+    public RegistrationRequest(String username, String email,
                                @Confidential String password, @Confidential Boolean registerAsAdmin) {
         this.username = username;
         this.email = email;
@@ -50,19 +50,19 @@ public class RegistrationRequest {
     public RegistrationRequest() {
     }
 
-    public @NonConfidential String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(@NonConfidential String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public @NonConfidential String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@NonConfidential String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 

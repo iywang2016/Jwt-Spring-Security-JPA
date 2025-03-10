@@ -13,16 +13,19 @@
  */
 package com.accolite.pru.health.AuthApp.exception;
 
+import org.checkerframework.checker.confidential.qual.NonConfidential;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import org.checkerframework.checker.confidential.qual.Confidential;
 
 @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
 public class PasswordResetException extends RuntimeException {
 
-    private final String user;
+    private final @Confidential String user;
     private final String message;
 
-    public PasswordResetException(String user, String message) {
+    public PasswordResetException(@Confidential String user, String message) {
         super(String.format("Couldn't reset password for [%s]: [%s])", user, message));
         this.user = user;
         this.message = message;

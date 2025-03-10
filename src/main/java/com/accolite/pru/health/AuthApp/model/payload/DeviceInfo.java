@@ -25,12 +25,12 @@ public class DeviceInfo {
 
     @NotBlank(message = "Device id cannot be blank")
     @Schema(name = "Device Id", required = true, type = "string", allowableValues = "Non empty string")
-    private @NonConfidential String deviceId;
+    private String deviceId;
 
     @NotNull(message = "Device type cannot be null")
     @Schema(name = "Device type Android/iOS", required = true, type = "string", allowableValues =
             "DEVICE_TYPE_ANDROID, DEVICE_TYPE_IOS")
-    private @NonConfidential DeviceType deviceType;
+    private DeviceType deviceType;
 
     @NullOrNotBlank(message = "Device notification token can be null but not blank")
     @Schema(name = "Device notification id", type = "string", allowableValues = "Non empty string")
@@ -39,25 +39,25 @@ public class DeviceInfo {
     public DeviceInfo() {
     }
 
-    public DeviceInfo(@NonConfidential String deviceId, @NonConfidential DeviceType deviceType, @Confidential String notificationToken) {
+    public DeviceInfo(String deviceId, DeviceType deviceType, @Confidential String notificationToken) {
         this.deviceId = deviceId;
         this.deviceType = deviceType;
         this.notificationToken = notificationToken;
     }
 
-    public @NonConfidential String getDeviceId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(@NonConfidential String deviceId) {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 
-    public @NonConfidential DeviceType getDeviceType() {
+    public DeviceType getDeviceType() {
         return deviceType;
     }
 
-    public void setDeviceType(@NonConfidential DeviceType deviceType) {
+    public void setDeviceType(DeviceType deviceType) {
         this.deviceType = deviceType;
     }
 
@@ -69,7 +69,6 @@ public class DeviceInfo {
         this.notificationToken = notificationToken;
     }
 
-    @Override
     public @Confidential String toString() {
         return "DeviceInfo{" +
                 "deviceId='" + deviceId + '\'' +

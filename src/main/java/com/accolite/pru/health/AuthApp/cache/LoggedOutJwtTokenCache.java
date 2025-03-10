@@ -59,8 +59,8 @@ public class LoggedOutJwtTokenCache {
             logger.info(String.format("Log out token for user [%s] is already present in the cache", event.getUserEmail()));
 
         } else {
-            @NonConfidential Date tokenExpiryDate = tokenProvider.getTokenExpiryFromJWT(token);
-            @NonConfidential long ttlForToken = getTTLForToken(tokenExpiryDate);
+            Date tokenExpiryDate = tokenProvider.getTokenExpiryFromJWT(token);
+            long ttlForToken = getTTLForToken(tokenExpiryDate);
             logger.info(String.format("Logout token cache set for [%s] with a TTL of [%s] seconds. Token is due expiry at [%s]", event.getUserEmail(), ttlForToken, tokenExpiryDate));
             tokenEventMap.put(token, event, ttlForToken, TimeUnit.SECONDS);
         }
@@ -70,11 +70,10 @@ public class LoggedOutJwtTokenCache {
         return tokenEventMap.get(token);
     }
 
-    private @NonConfidential long getTTLForToken(Date date) {
+    private long getTTLForToken(Date date) {
         long secondAtExpiry = date.toInstant().getEpochSecond();
         long secondAtLogout = Instant.now().getEpochSecond();
-        @SuppressWarnings("confidential") // wrapper operation
-        @NonConfidential long ttl = Math.max(0, secondAtExpiry - secondAtLogout);
+        long ttl = Math.max(0, secondAtExpiry - secondAtLogout);
         return ttl;
     }
 }

@@ -35,26 +35,26 @@ public class PasswordResetToken extends DateAudit {
     @Column(name = "TOKEN_ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pwd_reset_token_seq")
     @SequenceGenerator(name = "pwd_reset_token_seq", allocationSize = 1)
-    private @NonConfidential Long id;
+    private Long id;
 
     @NaturalId
     @Column(name = "TOKEN_NAME", nullable = false, unique = true)
     private @Confidential String token;
 
     @Column(name = "EXPIRY_DT", nullable = false)
-    private @NonConfidential Instant expiryDate;
+    private Instant expiryDate;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "USER_ID")
     private User user;
 
     @Column(name = "IS_ACTIVE", nullable = false)
-    private @NonConfidential Boolean active;
+    private Boolean active;
 
     @Column(name = "IS_CLAIMED", nullable = false)
-    private @NonConfidential Boolean claimed;
+    private Boolean claimed;
 
-    public PasswordResetToken(@NonConfidential Long id, @Confidential String token, @NonConfidential Instant expiryDate, User user) {
+    public PasswordResetToken(Long id, @Confidential String token, Instant expiryDate, User user) {
         this.id = id;
         this.token = token;
         this.expiryDate = expiryDate;
@@ -64,11 +64,11 @@ public class PasswordResetToken extends DateAudit {
     public PasswordResetToken() {
     }
 
-    public @NonConfidential Instant getExpiryDate() {
+    public Instant getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(@NonConfidential Instant expiryDate) {
+    public void setExpiryDate(Instant expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -88,19 +88,19 @@ public class PasswordResetToken extends DateAudit {
         this.token = token;
     }
 
-    public @NonConfidential Boolean getActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(@NonConfidential Boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
-    public @NonConfidential Boolean getClaimed() {
+    public Boolean getClaimed() {
         return claimed;
     }
 
-    public void setClaimed(@NonConfidential Boolean claimed) {
+    public void setClaimed(Boolean claimed) {
         this.claimed = claimed;
     }
 }

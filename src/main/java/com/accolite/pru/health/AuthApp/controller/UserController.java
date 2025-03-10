@@ -115,7 +115,6 @@ public class UserController {
         userService.logoutUser(customUserDetails, logOutRequest);
         Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
-        @SuppressWarnings("confidential") // wrapper operation
         @Confidential String token = credentials.toString();
         OnUserLogoutSuccessEvent logoutSuccessEvent = new OnUserLogoutSuccessEvent(customUserDetails.getEmail(),
                 token, logOutRequest);

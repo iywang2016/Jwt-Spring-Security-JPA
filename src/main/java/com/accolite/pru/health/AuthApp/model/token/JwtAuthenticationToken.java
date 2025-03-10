@@ -34,7 +34,7 @@ public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken 
     }
 
     @Override
-    public Object getCredentials() {
+    public @Confidential Object getCredentials() {
         return null;
     }
 

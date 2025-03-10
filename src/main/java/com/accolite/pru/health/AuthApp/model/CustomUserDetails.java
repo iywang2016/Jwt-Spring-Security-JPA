@@ -42,39 +42,38 @@ public class CustomUserDetails extends User implements UserDetails {
     }
 
     @Override
-    public @NonConfidential String getUsername() {
+    public String getUsername() {
         return super.getEmail();
     }
 
     @Override
-    public @NonConfidential boolean isAccountNonExpired() {
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public @NonConfidential boolean isAccountNonLocked() {
+    public boolean isAccountNonLocked() {
         return super.getActive();
     }
 
     @Override
-    public @NonConfidential boolean isCredentialsNonExpired() {
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public @NonConfidential boolean isEnabled() {
+    public boolean isEnabled() {
         return super.getEmailVerified();
     }
 
     @Override
-    public @NonConfidential int hashCode() {
-        @SuppressWarnings("confidential") // wrapper operation
-        @NonConfidential int hashId = Objects.hash(getId());
+    public int hashCode() {
+        int hashId = Objects.hash(getId());
         return hashId;
     }
 
     @Override
-    public @NonConfidential boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (obj == this) {
             return true;
         }
@@ -82,8 +81,7 @@ public class CustomUserDetails extends User implements UserDetails {
             return false;
         }
         CustomUserDetails that = (CustomUserDetails) obj;
-        @SuppressWarnings("confidential") // literals
-        @NonConfidential boolean result = Objects.equals(getId(), that.getId());
+        boolean result = Objects.equals(getId(), that.getId());
         return result;
     }
 }

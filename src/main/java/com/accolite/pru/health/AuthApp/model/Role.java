@@ -38,18 +38,18 @@ public class Role {
     @Id
     @Column(name = "ROLE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private @NonConfidential Long id;
+    private Long id;
 
     @Column(name = "ROLE_NAME")
     @Enumerated(EnumType.STRING)
     @NaturalId
-    private @Confidential RoleName role;
+    private RoleName role;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<User> userList = new HashSet<>();
 
-    public Role(@Confidential RoleName role) {
+    public Role(RoleName role) {
         this.role = role;
     }
 
@@ -57,25 +57,23 @@ public class Role {
 
     }
 
-    public @Confidential boolean isAdminRole() {
-        @SuppressWarnings("confidential") // literals
-        @Confidential boolean result = (null != this && this.role.equals(RoleName.ROLE_ADMIN));
-        return result;
+    public boolean isAdminRole() {
+        return null != this && this.role.equals(RoleName.ROLE_ADMIN);
     }
 
-    public @NonConfidential Long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@NonConfidential Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public @Confidential RoleName getRole() {
+    public RoleName getRole() {
         return role;
     }
 
-    public void setRole(@Confidential RoleName role) {
+    public void setRole(RoleName role) {
         this.role = role;
     }
 

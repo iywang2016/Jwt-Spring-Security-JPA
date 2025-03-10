@@ -15,6 +15,7 @@ package com.accolite.pru.health.AuthApp.validation.validator;
 
 import com.accolite.pru.health.AuthApp.model.payload.PasswordResetRequest;
 import com.accolite.pru.health.AuthApp.validation.annotation.MatchPassword;
+import org.checkerframework.checker.confidential.qual.NonConfidential;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -33,7 +34,7 @@ public class MatchPasswordValidator implements ConstraintValidator<MatchPassword
         String password = value.getPassword();
         String confirmPassword = value.getConfirmPassword();
         if (allowNull) {
-            return null == password && null == confirmPassword;
+            return (@NonConfidential boolean) (null == password && null == confirmPassword);
         }
         return password.equals(confirmPassword);
     }

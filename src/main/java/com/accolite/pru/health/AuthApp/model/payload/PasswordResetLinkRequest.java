@@ -23,20 +23,20 @@ public class PasswordResetLinkRequest {
 
     @NotBlank(message = "Email cannot be blank")
     @Schema(name = "User registered email", required = true, allowableValues = "NonEmpty String")
-    private @NonConfidential String email;
+    private String email;
 
-    public PasswordResetLinkRequest(@NonConfidential String email) {
+    public PasswordResetLinkRequest(String email) {
         this.email = email;
     }
 
     public PasswordResetLinkRequest() {
     }
 
-    public @NonConfidential String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@NonConfidential String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 

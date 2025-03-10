@@ -15,6 +15,7 @@ package com.accolite.pru.health.AuthApp.security;
 
 import com.accolite.pru.health.AuthApp.service.CustomUserDetailsService;
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.confidential.qual.NonConfidential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -70,7 +71,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
-            log.error("Failed to set user authentication in security context: ", ex);
+            @SuppressWarnings("confidential") // true positive
+            @NonConfidential Exception nonConfEx = ex;
+            log.error("Failed to set user authentication in security context: ", nonConfEx);
             throw ex;
         }
 

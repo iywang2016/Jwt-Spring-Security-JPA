@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import java.io.IOException;
 
+import org.checkerframework.checker.confidential.qual.NonConfidential;
+
 @Component
 public class OnRegenerateEmailVerificationListener implements ApplicationListener<OnRegenerateEmailVerificationEvent> {
 
@@ -56,12 +58,16 @@ public class OnRegenerateEmailVerificationListener implements ApplicationListene
         EmailVerificationToken emailVerificationToken = event.getToken();
         String recipientAddress = user.getEmail();
 
+        @SuppressWarnings("confidential")
+        @NonConfidential String nonConfToken = emailVerificationToken.getToken();
         String emailConfirmationUrl =
-                event.getRedirectUrl().queryParam("token", emailVerificationToken.getToken()).toUriString();
+                event.getRedirectUrl().queryParam("token", nonConfToken).toUriString();
         try {
             mailService.sendEmailVerification(emailConfirmationUrl, recipientAddress);
         } catch (IOException | TemplateException | MessagingException e) {
-            logger.error(e);
+            @SuppressWarnings("confidential") // true positive
+            @NonConfidential Exception nonConfErr = e;
+            logger.error(nonConfErr);
             throw new MailSendException(recipientAddress, "Email Verification");
         }
     }

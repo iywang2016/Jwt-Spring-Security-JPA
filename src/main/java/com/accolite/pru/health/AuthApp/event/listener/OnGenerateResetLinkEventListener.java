@@ -20,6 +20,7 @@ import com.accolite.pru.health.AuthApp.model.User;
 import com.accolite.pru.health.AuthApp.service.MailService;
 import freemarker.template.TemplateException;
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.confidential.qual.NonConfidential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
@@ -56,12 +57,16 @@ public class OnGenerateResetLinkEventListener implements ApplicationListener<OnG
         PasswordResetToken passwordResetToken = event.getPasswordResetToken();
         User user = passwordResetToken.getUser();
         String recipientAddress = user.getEmail();
-        String emailConfirmationUrl = event.getRedirectUrl().queryParam("token", passwordResetToken.getToken())
+        @SuppressWarnings("confidential") // true positive
+        @NonConfidential String token = passwordResetToken.getToken();
+        String emailConfirmationUrl = event.getRedirectUrl().queryParam("token", token)
                 .toUriString();
         try {
             mailService.sendResetLink(emailConfirmationUrl, recipientAddress);
         } catch (IOException | TemplateException | MessagingException e) {
-            logger.error(e);
+            @SuppressWarnings("confidential") // true positive
+            @NonConfidential Exception nonConfErr = e;
+            logger.error(nonConfErr);
             throw new MailSendException(recipientAddress, "Email Verification");
         }
     }

@@ -13,6 +13,7 @@
  */
 package com.accolite.pru.health.AuthApp.exception;
 
+import org.checkerframework.checker.confidential.qual.Confidential;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -21,9 +22,9 @@ public class ResourceNotFoundException extends RuntimeException {
 
     private final String resourceName;
     private final String fieldName;
-    private final Object fieldValue;
+    private final @Confidential Object fieldValue;
 
-    public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
+    public ResourceNotFoundException(String resourceName, String fieldName, @Confidential Object fieldValue) {
         super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
         this.resourceName = resourceName;
         this.fieldName = fieldName;
@@ -38,7 +39,7 @@ public class ResourceNotFoundException extends RuntimeException {
         return fieldName;
     }
 
-    public Object getFieldValue() {
+    public @Confidential Object getFieldValue() {
         return fieldValue;
     }
 }

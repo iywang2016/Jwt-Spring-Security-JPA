@@ -47,10 +47,9 @@ public class PasswordResetTokenService {
      * Finds a token in the database given its naturalId or throw an exception.
      * The reset token must match the email for the user and cannot be used again
      */
-    public @Confidential PasswordResetToken getValidToken(PasswordResetRequest request) {
-        String tokenID = request.getToken();
-        @SuppressWarnings("confidential") // force confidential
-        @Confidential PasswordResetToken token = repository.findByToken(tokenID)
+    public PasswordResetToken getValidToken(PasswordResetRequest request) {
+        @Confidential String tokenID = request.getToken();
+        PasswordResetToken token = repository.findByToken(tokenID)
                 .orElseThrow(() -> new ResourceNotFoundException("Password Reset Token", "Token Id", tokenID));
 
         matchEmail(token, request.getEmail());
@@ -108,13 +107,11 @@ public class PasswordResetTokenService {
         }
     }
 
-    @Confidential PasswordResetToken createTokenWithUser(User user) {
-        @SuppressWarnings("confidential") // force confidential
+    PasswordResetToken createTokenWithUser(User user) {
         @Confidential String tokenID = Util.generateRandomUuid();
-        @Confidential PasswordResetToken token = new @Confidential PasswordResetToken();
+        PasswordResetToken token = new PasswordResetToken();
         token.setToken(tokenID);
-        @SuppressWarnings("confidential") // literals
-        @NonConfidential Instant expiryDate = Instant.now().plusMillis(expiration);
+        Instant expiryDate = Instant.now().plusMillis(expiration);
         token.setExpiryDate(expiryDate);
         token.setClaimed(false);
         token.setActive(true);

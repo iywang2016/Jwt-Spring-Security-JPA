@@ -46,7 +46,7 @@ public class EmailVerificationTokenService {
      * verified by the user
      */
     public void createVerificationToken(User user, @Confidential String token) {
-        @Confidential EmailVerificationToken emailVerificationToken = new @Confidential EmailVerificationToken();
+        EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
         emailVerificationToken.setToken(token);
         emailVerificationToken.setTokenStatus(TokenStatus.STATUS_PENDING);
         emailVerificationToken.setUser(user);
@@ -58,7 +58,7 @@ public class EmailVerificationTokenService {
     /**
      * Updates an existing token in the database with a new expiration
      */
-    public @Confidential EmailVerificationToken updateExistingTokenWithNameAndExpiry(@Confidential EmailVerificationToken existingToken) {
+    public EmailVerificationToken updateExistingTokenWithNameAndExpiry(EmailVerificationToken existingToken) {
         existingToken.setTokenStatus(TokenStatus.STATUS_PENDING);
         existingToken.setExpiryDate(Instant.now().plusMillis(emailVerificationTokenExpiryDuration));
         logger.info("Updated Email verification token");
@@ -68,18 +68,16 @@ public class EmailVerificationTokenService {
     /**
      * Finds an email verification token by the @NaturalId token
      */
-    public Optional<@Confidential EmailVerificationToken> findByToken(String token) {
-        @SuppressWarnings("confidential") // force confidential
-        Optional<@Confidential EmailVerificationToken> result = emailVerificationTokenRepository.findByToken(token);
+    public Optional<EmailVerificationToken> findByToken(String token) {
+        Optional<EmailVerificationToken> result = emailVerificationTokenRepository.findByToken(token);
         return result;
     }
 
     /**
      * Saves an email verification token in the repository
      */
-    public @Confidential EmailVerificationToken save(EmailVerificationToken emailVerificationToken) {
-        @SuppressWarnings("confidential") // force confidential
-        @Confidential EmailVerificationToken token = emailVerificationTokenRepository.save(emailVerificationToken);
+    public EmailVerificationToken save(EmailVerificationToken emailVerificationToken) {
+        EmailVerificationToken token = emailVerificationTokenRepository.save(emailVerificationToken);
         return token;
     }
 
@@ -87,7 +85,6 @@ public class EmailVerificationTokenService {
      * Generates a new random UUID to be used as the token for email verification
      */
     public @Confidential String generateNewToken() {
-        @SuppressWarnings("confidential") // force confidential
         @Confidential String result = UUID.randomUUID().toString();
         return result;
     }

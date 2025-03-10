@@ -22,22 +22,21 @@ import java.util.Date;
 
 public class OnUserLogoutSuccessEvent extends ApplicationEvent {
 
-    private final @NonConfidential String userEmail;
+    private final String userEmail;
     private final @Confidential String token;
     private final transient LogOutRequest logOutRequest;
-    private final @NonConfidential Date eventTime;
+    private final Date eventTime;
 
-    public OnUserLogoutSuccessEvent(@NonConfidential String userEmail, @Confidential String token, LogOutRequest logOutRequest) {
+    public OnUserLogoutSuccessEvent(String userEmail, @Confidential String token, LogOutRequest logOutRequest) {
         super(userEmail);
         this.userEmail = userEmail;
         this.token = token;
         this.logOutRequest = logOutRequest;
-        @SuppressWarnings("confidential") // literals
-        @NonConfidential Date date = Date.from(Instant.now());
+        Date date = Date.from(Instant.now());
         this.eventTime = date;
     }
 
-    public @NonConfidential String getUserEmail() {
+    public String getUserEmail() {
         return userEmail;
     }
 
@@ -49,7 +48,7 @@ public class OnUserLogoutSuccessEvent extends ApplicationEvent {
         return logOutRequest;
     }
 
-    public @NonConfidential Date getEventTime() {
+    public Date getEventTime() {
         return eventTime;
     }
 }

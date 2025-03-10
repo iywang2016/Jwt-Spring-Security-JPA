@@ -21,17 +21,13 @@ public class JwtAuthenticationResponse {
 
     private @Confidential String refreshToken;
 
-    private @NonConfidential String tokenType;
+    private String tokenType;
 
-    private @NonConfidential Long expiryDuration;
+    private Long expiryDuration;
 
-    public JwtAuthenticationResponse(String accessToken, String refreshToken, @NonConfidential Long expiryDuration) {
-        @SuppressWarnings("confidential") // force confidential
-        @Confidential String confAccToken = accessToken;
-        @SuppressWarnings("confidential") // force confidential
-        @Confidential String confRefToken = refreshToken;
-        this.accessToken = confAccToken;
-        this.refreshToken = confRefToken;
+    public JwtAuthenticationResponse(@Confidential String accessToken, @Confidential String refreshToken, Long expiryDuration) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
         this.expiryDuration = expiryDuration;
         tokenType = "Bearer ";
     }
@@ -44,11 +40,11 @@ public class JwtAuthenticationResponse {
         this.accessToken = accessToken;
     }
 
-    public @NonConfidential String getTokenType() {
+    public String getTokenType() {
         return tokenType;
     }
 
-    public void setTokenType(@NonConfidential String tokenType) {
+    public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
     }
 
@@ -60,11 +56,11 @@ public class JwtAuthenticationResponse {
         this.refreshToken = refreshToken;
     }
 
-    public @NonConfidential Long getExpiryDuration() {
+    public Long getExpiryDuration() {
         return expiryDuration;
     }
 
-    public void setExpiryDuration(@NonConfidential Long expiryDuration) {
+    public void setExpiryDuration(Long expiryDuration) {
         this.expiryDuration = expiryDuration;
     }
 }

@@ -13,10 +13,12 @@
  */
 package com.accolite.pru.health.AuthApp.model;
 
+import org.checkerframework.checker.confidential.qual.NonConfidential;
+
 /**
  * The enum Role role.
  */
-public enum RoleName {
+public @NonConfidential enum RoleName {
 
     /**
      * Role admin authority role.

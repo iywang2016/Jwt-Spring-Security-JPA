@@ -76,7 +76,7 @@ public class AuthService {
      * @return A user object if successfully created
      */
     public Optional<User> registerUser(RegistrationRequest newRegistrationRequest) {
-        @NonConfidential String newRegistrationRequestEmail = newRegistrationRequest.getEmail();
+        String newRegistrationRequestEmail = newRegistrationRequest.getEmail();
         if (emailAlreadyExists(newRegistrationRequestEmail)) {
             logger.error("Email already exists: " + newRegistrationRequestEmail);
             throw new ResourceAlreadyInUseException("Email", "Address", newRegistrationRequestEmail);
@@ -118,7 +118,7 @@ public class AuthService {
      * If user is already verified, save the unnecessary database calls.
      */
     public Optional<User> confirmEmailRegistration(String emailToken) {
-        @Confidential EmailVerificationToken emailVerificationToken = emailVerificationTokenService.findByToken(emailToken)
+        EmailVerificationToken emailVerificationToken = emailVerificationTokenService.findByToken(emailToken)
                 .orElseThrow(() -> new ResourceNotFoundException("Token", "Email verification", emailToken));
 
         User registeredUser = emailVerificationToken.getUser();
@@ -141,24 +141,22 @@ public class AuthService {
      * previous expired token. If the previous token is valid, increase its expiry
      * else update the token value and add a new expiration.
      */
-    public @Confidential Optional<EmailVerificationToken> recreateRegistrationToken(String existingToken) {
-        @Confidential EmailVerificationToken emailVerificationToken = emailVerificationTokenService.findByToken(existingToken)
+    public Optional<EmailVerificationToken> recreateRegistrationToken(String existingToken) {
+        EmailVerificationToken emailVerificationToken = emailVerificationTokenService.findByToken(existingToken)
                 .orElseThrow(() -> new ResourceNotFoundException("Token", "Existing email verification", existingToken));
 
         if (emailVerificationToken.getUser().getEmailVerified()) {
-            @SuppressWarnings("confidential") // force confidential
-            @Confidential Optional<EmailVerificationToken> result = Optional.empty();
+            Optional<EmailVerificationToken> result = Optional.empty();
             return result;
         }
-        @SuppressWarnings("confidential") // force confidential
-        @Confidential Optional<EmailVerificationToken> result = Optional.ofNullable(emailVerificationTokenService.updateExistingTokenWithNameAndExpiry(emailVerificationToken));
+        Optional<EmailVerificationToken> result = Optional.ofNullable(emailVerificationTokenService.updateExistingTokenWithNameAndExpiry(emailVerificationToken));
         return result;
     }
 
     /**
      * Validates the password of the current logged in user with the given password
      */
-    private Boolean currentPasswordMatches(User currentUser, String password) {
+    private Boolean currentPasswordMatches(User currentUser, @Confidential String password) {
         return passwordEncoder.matches(password, currentUser.getPassword());
     }
 
@@ -167,7 +165,7 @@ public class AuthService {
      */
     public Optional<User> updatePassword(CustomUserDetails customUserDetails,
                                          UpdatePasswordRequest updatePasswordRequest) {
-        @NonConfidential String email = customUserDetails.getEmail();
+        String email = customUserDetails.getEmail();
         User currentUser = userService.findByEmail(email)
                 .orElseThrow(() -> new UpdatePasswordException(email, "No matching user found"));
 
@@ -175,7 +173,6 @@ public class AuthService {
             logger.info("Current password is invalid");
             throw new UpdatePasswordException(currentUser.getEmail(), "Invalid current password");
         }
-        @SuppressWarnings("confidential") // force confidential
         @Confidential String newPassword = passwordEncoder.encode(updatePasswordRequest.getNewPassword());
         currentUser.setPassword(newPassword);
         userService.save(currentUser);
@@ -224,7 +221,7 @@ public class AuthService {
      * * generate a new jwt. If the refresh token is inactive for a device or it is expired,
      * * throw appropriate errors.
      */
-    public Optional<String> refreshJwtToken(TokenRefreshRequest tokenRefreshRequest) {
+    public Optional<@Confidential String> refreshJwtToken(TokenRefreshRequest tokenRefreshRequest) {
         String requestRefreshToken = tokenRefreshRequest.getRefreshToken();
 
         return Optional.of(refreshTokenService.findByToken(requestRefreshToken)
@@ -244,10 +241,9 @@ public class AuthService {
     /**
      * Generates a password reset token from the given reset request
      */
-    public @Confidential Optional<PasswordResetToken> generatePasswordResetToken(PasswordResetLinkRequest passwordResetLinkRequest) {
+    public Optional<PasswordResetToken> generatePasswordResetToken(PasswordResetLinkRequest passwordResetLinkRequest) {
         String email = passwordResetLinkRequest.getEmail();
-        @SuppressWarnings("confidential") // force confidential
-        @Confidential Optional<PasswordResetToken> result = userService.findByEmail(email)
+        Optional<PasswordResetToken> result = userService.findByEmail(email)
                 .map(passwordResetService::createToken)
                 .orElseThrow(() -> new PasswordResetLinkException(email, "No matching user found for the given request"));
         return result;
@@ -261,7 +257,7 @@ public class AuthService {
      * reset tokens prior to changing the user password.
      */
     public Optional<User> resetPassword(PasswordResetRequest request) {
-        @Confidential PasswordResetToken token = passwordResetService.getValidToken(request);
+        PasswordResetToken token = passwordResetService.getValidToken(request);
         final String encodedPassword = passwordEncoder.encode(request.getConfirmPassword());
 
         return Optional.of(token)

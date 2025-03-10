@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import org.checkerframework.checker.confidential.qual.Confidential;
+
 import java.time.Instant;
 import java.util.Optional;
 
@@ -40,7 +42,7 @@ public class RefreshTokenService {
     /**
      * Find a refresh token based on the natural id i.e the token itself
      */
-    public Optional<RefreshToken> findByToken(String token) {
+    public Optional<RefreshToken> findByToken(@Confidential String token) {
         return refreshTokenRepository.findByToken(token);
     }
 

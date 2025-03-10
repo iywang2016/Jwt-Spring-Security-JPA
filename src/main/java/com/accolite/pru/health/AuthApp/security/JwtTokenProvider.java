@@ -35,9 +35,9 @@ public class JwtTokenProvider {
 
     private static final String AUTHORITIES_CLAIM = "authorities";
     private final String jwtSecret;
-    private final @NonConfidential long jwtExpirationInMs;
+    private final long jwtExpirationInMs;
 
-    public JwtTokenProvider(@Value("${app.jwt.secret}") String jwtSecret, @Value("${app.jwt.expiration}") @NonConfidential long jwtExpirationInMs) {
+    public JwtTokenProvider(@Value("${app.jwt.secret}") String jwtSecret, @Value("${app.jwt.expiration}") long jwtExpirationInMs) {
         this.jwtSecret = jwtSecret;
         this.jwtExpirationInMs = jwtExpirationInMs;
     }
@@ -49,7 +49,6 @@ public class JwtTokenProvider {
     public @Confidential String generateToken(CustomUserDetails customUserDetails) {
         Instant expiryDate = Instant.now().plusMillis(jwtExpirationInMs);
         String authorities = getUserAuthorities(customUserDetails);
-        @SuppressWarnings("confidential") // force confidential
         @Confidential String token = Jwts.builder()
                 .setSubject(Long.toString(customUserDetails.getId()))
                 .setIssuedAt(Date.from(Instant.now()))
@@ -89,14 +88,13 @@ public class JwtTokenProvider {
     /**
      * Returns the token expiration date encapsulated within the token
      */
-    public @NonConfidential Date getTokenExpiryFromJWT(String token) {
+    public Date getTokenExpiryFromJWT(@Confidential String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
 
-        @SuppressWarnings("confidential") // literals
-        @NonConfidential Date exp = claims.getExpiration();
+        Date exp = claims.getExpiration();
         return exp;
     }
 
@@ -104,7 +102,7 @@ public class JwtTokenProvider {
      * Return the jwt expiration for the client so that they can execute
      * the refresh token logic appropriately
      */
-    public @NonConfidential long getExpiryDuration() {
+    public long getExpiryDuration() {
         return jwtExpirationInMs;
     }
 

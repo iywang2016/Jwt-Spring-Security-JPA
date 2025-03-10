@@ -15,6 +15,7 @@ package com.accolite.pru.health.AuthApp.model;
 
 import com.accolite.pru.health.AuthApp.model.audit.DateAudit;
 import com.accolite.pru.health.AuthApp.model.token.RefreshToken;
+import org.checkerframework.checker.confidential.qual.Confidential;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,7 +47,7 @@ public class UserDevice extends DateAudit {
     private DeviceType deviceType;
 
     @Column(name = "NOTIFICATION_TOKEN")
-    private String notificationToken;
+    private @Confidential String notificationToken;
 
     @Column(name = "DEVICE_ID", nullable = false)
     private String deviceId;
@@ -60,7 +61,7 @@ public class UserDevice extends DateAudit {
     public UserDevice() {
     }
 
-    public UserDevice(Long id, User user, DeviceType deviceType, String notificationToken, String deviceId,
+    public UserDevice(Long id, User user, DeviceType deviceType, @Confidential String notificationToken, String deviceId,
                       RefreshToken refreshToken, Boolean isRefreshActive) {
         this.id = id;
         this.user = user;
@@ -95,11 +96,11 @@ public class UserDevice extends DateAudit {
         this.deviceType = deviceType;
     }
 
-    public String getNotificationToken() {
+    public @Confidential String getNotificationToken() {
         return notificationToken;
     }
 
-    public void setNotificationToken(String notificationToken) {
+    public void setNotificationToken(@Confidential String notificationToken) {
         this.notificationToken = notificationToken;
     }
 
